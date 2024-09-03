@@ -1,4 +1,4 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.data
 
 import androidx.room.Dao
 import androidx.room.Database

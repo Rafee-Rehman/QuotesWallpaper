@@ -1,4 +1,4 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.common
 
 import android.app.WallpaperManager
 import android.content.Context
@@ -11,6 +11,8 @@ import android.provider.OpenableColumns
 import android.util.Size
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.layer.GraphicsLayer
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -20,34 +22,9 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.random.Random
 
 
-class DefaultImages @Inject constructor(
-    private val context: Context,
-    @Named("defDrawables") private val drawables: Array<Int>
-){
-    fun defImages(): List<Uri> {
-        var images = arrayOf<Uri>()
-        drawables.forEach {
-            val imgUri = Uri.parse("android.resource://${context.packageName}/${it}")
-            images += imgUri
-        }
-        return images.toList()
-    }
-}
-
-data class DefaultDrawables(
-    val defaultImages: Array<Int> = arrayOf(
-        R.drawable.defaultwallpaper,
-        R.drawable.defaultwallpaper1,
-        R.drawable.defaultwallpaper2,
-        R.drawable.defaultwallpaper3,
-        R.drawable.defaultwallpaper4,
-        R.drawable.defaultwallpaper5
-    )
-)
 
 class Utilities @Inject constructor(private val context: Context){
     fun provideToast(ss:String): Toast {
@@ -73,10 +50,10 @@ class Utilities @Inject constructor(private val context: Context){
         }
     }
 
-    fun setWallpaper(bitmap: Bitmap){
+    suspend fun setWallpaper(gl: GraphicsLayer){
         val wallpaperManager = WallpaperManager.getInstance(context)
-//        val bitmap = graphicsLayer.toImageBitmap()
-        wallpaperManager.setBitmap(bitmap,
+        val bitmap = gl.toImageBitmap()
+        wallpaperManager.setBitmap(bitmap.asAndroidBitmap(),
             null, true,
             WallpaperManager.FLAG_SYSTEM)
         wallpaperManager.wallpaperInfo

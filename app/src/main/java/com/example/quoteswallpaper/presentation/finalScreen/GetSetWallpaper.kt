@@ -1,7 +1,5 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.presentation.finalScreen
 
-import android.app.WallpaperManager
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,58 +36,45 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
+import com.example.quoteswallpaper.R
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
 fun GetSetWallpaper(
-//    states: GetSetWallpaperStates,
-//    onEvent: (OnEventGetSetWallpaper) -> Unit,
+    states: GetSetWallpaperStates,
+    onEvent: (OnEventGetSetWallpaper) -> Unit,
     imageUri: Uri?,
     quote: String,
 ){
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
     val snackbarHostState = remember { SnackbarHostState() }
     var showOption by remember{ mutableStateOf(false)}
     var showColorCard by remember { mutableStateOf(false) }
     var color by remember { mutableStateOf(Color.Black)    }
-    var image: Bitmap? = null
 
+    onEvent(OnEventGetSetWallpaper.SetCurrentImageUri(imageUri))
+    onEvent(OnEventGetSetWallpaper.SetCurrentQuote(quote))
 
-    fun setWallpaper(){
-        val wallpaperManager = WallpaperManager.getInstance(context)
-        coroutineScope.launch {
-            val bitmap = graphicsLayer.toImageBitmap()
-            wallpaperManager.setBitmap(bitmap.asAndroidBitmap(), null, true, WallpaperManager.FLAG_SYSTEM)
-            wallpaperManager.wallpaperInfo
-        }
-    }
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
@@ -114,7 +99,7 @@ fun GetSetWallpaper(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .clickable {
-                                    setWallpaper()
+                                    onEvent(OnEventGetSetWallpaper.SetWallpaper(graphicsLayer))
                                     showOption = false
                                 }
                         )
@@ -159,8 +144,8 @@ fun GetSetWallpaper(
                 }
         ) {
             ScreenContentToCapture(
-                imageUri,
-                quote,
+                states.currentImageUri,
+                states.currentQuote,
                 color
             )
         }
@@ -259,10 +244,7 @@ fun colorPickerScreen(
         TextButton(onClick = {onClick()}) {
             Text(text = "Ok")
         }
-
-
     }
-
     return color
 }
 

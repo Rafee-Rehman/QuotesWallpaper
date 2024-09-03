@@ -1,4 +1,4 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.presentation.homeScreen.image
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -50,6 +51,7 @@ fun GetImage(
     val lazyState1 = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var lazyItemIndex1 by remember{ mutableIntStateOf(5) }
+    var stateBool by remember{ mutableStateOf(false)}
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             onEvent(GetImageOnEvent.SetImageUri(uri))
@@ -119,11 +121,13 @@ fun GetImage(
                                 onEvent(GetImageOnEvent.DeleteImageUri(item.uri.toUri()))
                                 onEvent(GetImageOnEvent.GetAllImageUri())
                                 onEvent(GetImageOnEvent.SetImageUri(state.defaultImagesList[5]))
+                                stateBool = !stateBool
                             },
                                 modifier = Modifier
                                     .size(40.dp)
                                     .border(0.5.dp, Color.Black, RoundedCornerShape(4.dp))
                             ){
+                                stateBool = !stateBool
                                 Icon(imageVector = Icons.Outlined.Delete,
                                     contentDescription ="Delete icon",
                                     tint = Color.Red
@@ -145,9 +149,6 @@ fun GetImage(
             modifier = Modifier
                 .offset(0.dp, 35.dp)
                 .size(60.dp)
-//                .clip(RoundedCornerShape(4.dp))
-//                .border(.1.dp, Color.Red, RoundedCornerShape(4.dp))
-//                .background(Color.Red)
 
         ) {
             Icon(imageVector = Icons.Default.AddCircle,
@@ -157,5 +158,4 @@ fun GetImage(
             )
         }
     }
-
 }

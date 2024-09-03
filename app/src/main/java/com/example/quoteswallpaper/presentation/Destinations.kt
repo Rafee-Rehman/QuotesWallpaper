@@ -1,4 +1,4 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.presentation
 
 
 

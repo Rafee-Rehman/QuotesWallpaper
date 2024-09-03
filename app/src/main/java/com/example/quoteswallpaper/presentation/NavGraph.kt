@@ -1,4 +1,4 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,6 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.quoteswallpaper.presentation.finalScreen.GetSetWallpaper
+import com.example.quoteswallpaper.presentation.finalScreen.GetSetWallpaperViewModel
+import com.example.quoteswallpaper.presentation.homeScreen.image.GetImageViewModel
+import com.example.quoteswallpaper.presentation.homeScreen.quotes.QuotesViewModel
+import com.example.quoteswallpaper.presentation.homeScreen.ScreenHome
 
 @Composable
 fun NavGraph1(
@@ -15,13 +20,13 @@ fun NavGraph1(
 ) {
     val vmGetQuote = hiltViewModel<QuotesViewModel>()
     val vmGetImage = hiltViewModel<GetImageViewModel>()
-//    val vmGetSetImage = hiltViewModel<GetSetWallpaperViewModel>()
+    val vmGetSetImage = hiltViewModel<GetSetWallpaperViewModel>()
     val stateGetImage by vmGetImage.getImagesStates.collectAsState()
     val statesQuotesScreen by vmGetQuote.quoteStates.collectAsState()
-//    val statesGetSetWallpaper by vmGetSetImage.getSetWallpaperStates.collectAsState()
+    val statesGetSetWallpaper by vmGetSetImage.getSetWallpaperStates.collectAsState()
     val onEventGetImage = vmGetImage::onEvent
     val onEventQuotesScreen = vmGetQuote::onEvent
-//    val onEventGetSetWallpaper = vmGetSetImage::onEvent
+    val onEventGetSetWallpaper = vmGetSetImage::onEvent
 
     NavHost(navController = navController, startDestination = ScreenHomeRoute.toString()) {
         composable(ScreenHomeRoute.toString()) {
@@ -37,8 +42,8 @@ fun NavGraph1(
         }
         composable(GetSetWallpaperRoute.toString()) {
             GetSetWallpaper(
-//                states = statesGetSetWallpaper,
-//                onEvent = onEventGetSetWallpaper,
+                states = statesGetSetWallpaper,
+                onEvent = onEventGetSetWallpaper,
                 imageUri = stateGetImage.galleryImageUri,
                 quote = statesQuotesScreen.currentQuote
             )

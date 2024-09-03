@@ -3,6 +3,11 @@ package com.example.quoteswallpaper
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.example.quoteswallpaper.data.ImagesDbDao
+import com.example.quoteswallpaper.data.QuotesDao
+import com.example.quoteswallpaper.data.QuotesDb
+import com.example.quoteswallpaper.data.UriDatabase
+import com.example.quoteswallpaper.presentation.homeScreen.image.DefaultDrawables
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

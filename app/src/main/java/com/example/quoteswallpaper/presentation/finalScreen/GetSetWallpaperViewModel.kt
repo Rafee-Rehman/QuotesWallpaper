@@ -1,11 +1,15 @@
-package com.example.quoteswallpaper
+package com.example.quoteswallpaper.presentation.finalScreen
 
-import android.graphics.Bitmap
+import android.net.Uri
+import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.quoteswallpaper.common.Utilities
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +24,7 @@ class GetSetWallpaperViewModel @Inject constructor(
             is OnEventGetSetWallpaper.SetCurrentImageUri -> {
                 _getSetWallpaperStates.update {
                     it.copy(
-                        currentImageUri = event.string
+                        currentImageUri = event.uri
                     )
                 }
             }
@@ -32,9 +36,11 @@ class GetSetWallpaperViewModel @Inject constructor(
                 }
             }
             is OnEventGetSetWallpaper.SetWallpaper -> {
-                utilities.setWallpaper(
-                    event.image
-                )
+                viewModelScope.launch {
+                    utilities.setWallpaper(
+                        event.gl)
+                }
+
             }
         }
     }
@@ -42,13 +48,13 @@ class GetSetWallpaperViewModel @Inject constructor(
 
 
 data class GetSetWallpaperStates (
-    val currentImageUri: String = "",
+    val currentImageUri: Uri? = null,
     val currentQuote: String = "",
 )
 
 interface OnEventGetSetWallpaper{
-    class SetCurrentImageUri(val string: String): OnEventGetSetWallpaper
+    class SetCurrentImageUri(val uri: Uri?): OnEventGetSetWallpaper
     class SetCurrentQuote(val string: String): OnEventGetSetWallpaper
-    class SetWallpaper(val image: Bitmap): OnEventGetSetWallpaper
+    class SetWallpaper(val gl: GraphicsLayer): OnEventGetSetWallpaper
 
 }

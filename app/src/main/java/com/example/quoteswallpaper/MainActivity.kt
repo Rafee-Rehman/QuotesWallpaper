@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import com.example.quoteswallpaper.data.QuotesDb
+import com.example.quoteswallpaper.data.UriDatabase
+import com.example.quoteswallpaper.presentation.NavGraph1
 import com.example.quoteswallpaper.ui.theme.QuotesWallpaperTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
