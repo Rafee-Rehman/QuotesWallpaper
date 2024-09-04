@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.7.0-beta05")
     implementation ("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation ("com.google.mlkit:text-recognition:16.0.0")
+    implementation ("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
     implementation("com.github.skydoves:colorpicker-compose:1.1.2")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
